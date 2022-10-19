@@ -1,4 +1,5 @@
 import "./style/index.css"
+import IMask from "imask"
 
 // pega o primeiro g do primeiro nivel de g dentro de svg que está em .cc-bg
 const ccBgColor01 = document.querySelector(".cc-bg svg > g g:nth-child(1) path")
@@ -21,7 +22,60 @@ function setCardType(type) {
     ccLogo.setAttribute("src", `./cc-${type}.svg`)
 }
 
-setCardType("visa")
+// setCardType("visa")
 
 // coloca a função como global - pode ser executada do navegador
 globalThis.setCardType = setCardType
+
+
+// Adds CVV mask
+const securityCode = document.querySelector('#security-code')
+const securityCodeMask = IMask(securityCode, {
+    // must contain min 3 digits and max 4 digits
+    mask: '000[0]',
+    lazy: false,
+})
+
+// Adds card expirations mask
+const expirationDate = document.querySelector('#expiration-date')
+const momentFormat = 'MM/YY'
+const yearToday = new Date().getFullYear()
+const expirationDateMask = IMask(expirationDate, {
+    mask: Date,
+    pattern: momentFormat,
+    lazy: false,
+    min: new Date(),
+    max: new Date(yearToday+10, 11, 31),
+
+    // define date -> str convertion
+    format: function (date) {
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+
+        return [month, year % 100].join('/');
+    },
+    // define str -> date convertion
+    parse: function (str) {
+        var monthYear = str.split('/');
+
+        return new Date(Number(monthYear[1]) + 2000, Number(monthYear[0]) - 1);
+    },
+
+    blocks: {
+        MM: {
+            mask: IMask.MaskedRange,
+            from: 1,
+            to: 12,
+            maxLength: 2,
+        },
+        YY: {
+            mask: IMask.MaskedRange,
+            from: (yearToday % 100),
+            to: (yearToday % 100) + 10,
+            maxLength: 2,
+        }
+    }
+})
+
