@@ -31,8 +31,8 @@ globalThis.setCardType = setCardType
 // Adds CVV mask
 const securityCode = document.querySelector('#security-code')
 const securityCodeMask = IMask(securityCode, {
-    // must contain min 3 digits and max 4 digits
-    mask: '000[0]',
+    // must contain 3 digits
+    mask: '000',
     lazy: false,
 })
 
@@ -79,3 +79,38 @@ const expirationDateMask = IMask(expirationDate, {
     }
 })
 
+
+// Adds card number mask
+const cardNumber = document.querySelector('#card-number')
+const cardNumberMask = IMask(cardNumber, {
+    mask: [
+        {
+            cardtype: 'visa',
+            regex: /^4\d{0,15}/,
+            mask: '0000 0000 0000 0000',
+        },
+        {
+            cardtype: 'mastercard',
+            regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0,2})\d{0,12}/,
+            mask: '0000 0000 0000 0000',
+        },
+        {
+            cardtype: 'elo',
+            regex: /^4\d{0,15}/,
+            mask: '0000 0000 0000 0000',
+        },
+        {
+            cardtype: 'default',
+            mask: '0000 0000 0000 0000',
+        },
+    ],
+
+    dispatch: function (appended, dynamicMasked) {
+        // accepts only digits
+        var number = (dynamicMasked.value + appended).replace(/\D/g, '');
+        // pega apenas o atributo regex de cada item do array
+        const foundMask = dynamicMasked.compiledMasks.find(({regex}) => number.match(regex));
+
+        return foundMask;
+    }
+})
