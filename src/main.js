@@ -127,3 +127,11 @@ document.querySelector("form").addEventListener("submit", (event) => {
     // O comportamento default de um submit é recarregar a página
     event.preventDefault()
 })
+
+const cardHolder = document.querySelector('#card-holder')
+cardHolder.addEventListener('input', (event) => {
+    // Modifica o nome do card holder com base no que está sendo digitado
+    const ccHolder = document.querySelector('.cc-holder .value')
+
+    ccHolder.innerText = event.target.value.length === 0 ? "FULANO DA SILVA" : event.target.value
+})
