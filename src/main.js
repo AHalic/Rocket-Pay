@@ -156,3 +156,12 @@ securityCodeMask.on('accept', () => {
     
     ccCvv.innerText = securityCodeMask.value.length === 0 ? "123" : securityCodeMask.value
 })
+
+cardNumberMask.on('accept', () => {
+    const ccNumber = document.querySelector('.cc-number')
+    
+    ccNumber.innerText = cardNumberMask.value.length === 0 ? "1234 5678 9012 3456" : cardNumberMask.value
+
+    const cardType = cardNumberMask.masked.currentMask.cardtype
+    setCardType(cardType)
+})
