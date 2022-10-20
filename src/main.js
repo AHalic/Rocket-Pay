@@ -29,6 +29,7 @@ globalThis.setCardType = setCardType
 
 
 // Adds CVV mask
+// No query selector usa-se # para id e . para class
 const securityCode = document.querySelector('#security-code')
 const securityCodeMask = IMask(securityCode, {
     // must contain 3 digits
@@ -113,4 +114,16 @@ const cardNumberMask = IMask(cardNumber, {
 
         return foundMask;
     }
+})
+
+
+// Adds button to add card event listner
+const addButton = document.querySelector('#button-add-card')
+addButton.addEventListener('click', () => {
+    alert('Card added!')
+})
+
+document.querySelector("form").addEventListener("submit", (event) => {
+    // O comportamento default de um submit é recarregar a página
+    event.preventDefault()
 })
