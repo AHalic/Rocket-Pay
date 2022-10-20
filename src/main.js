@@ -48,6 +48,12 @@ securityCode.addEventListener('blur', function() {
     }
 }, true);
 
+const nameCard = document.querySelector('#card-holder')
+const nameCardMask = IMask(nameCard, {
+    // mask: /^\w{1,22}$/,
+    mask: /^[a-z ,.'-]{1,22}$/i,
+})
+
 
 // Adds card expirations mask
 const expirationDate = document.querySelector('#expiration-date')
@@ -138,6 +144,9 @@ const cardNumberMask = IMask(cardNumber, {
 })
 
 
+
+
+
 // Adds button to add card event listner
 const addButton = document.querySelector('#button-add-card')
 addButton.addEventListener('click', () => {
@@ -149,6 +158,9 @@ document.querySelector("form").addEventListener("submit", (event) => {
     event.preventDefault()
 })
 
+
+
+// Adds event listener to card inputs
 const cardHolder = document.querySelector('#card-holder')
 cardHolder.addEventListener('input', (event) => {
     // Modifica o nome do card holder com base no que está sendo digitado
