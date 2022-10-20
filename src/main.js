@@ -34,7 +34,6 @@ const securityCode = document.querySelector('#security-code')
 const securityCodeMask = IMask(securityCode, {
     // must contain 3 digits
     mask: '000',
-    lazy: false,
 })
 
 // Removes lazy when not focused
@@ -57,7 +56,6 @@ const yearToday = new Date().getFullYear()
 const expirationDateMask = IMask(expirationDate, {
     mask: Date,
     pattern: momentFormat,
-    lazy: false,
     min: new Date(),
     max: new Date(yearToday+10, 11, 31),
 
@@ -92,6 +90,16 @@ const expirationDateMask = IMask(expirationDate, {
         }
     }
 })
+expirationDate.addEventListener('focus', function() {
+    expirationDateMask.updateOptions({ lazy: false });
+}, true);
+expirationDate.addEventListener('blur', function() {
+    expirationDateMask.updateOptions({ lazy: true });
+    // NEXT IS OPTIONAL
+    if (!expirationDateMask.masked.rawInputValue) {
+        expirationDateMask.value = '';
+    }
+}, true);
 
 
 // Adds card number mask
@@ -110,7 +118,7 @@ const cardNumberMask = IMask(cardNumber, {
         },
         {
             cardtype: 'elo',
-            regex: /^4\d{0,15}/,
+            regex: /^6\d{0,15}/,
             mask: '0000 0000 0000 0000',
         },
         {
@@ -164,4 +172,10 @@ cardNumberMask.on('accept', () => {
 
     const cardType = cardNumberMask.masked.currentMask.cardtype
     setCardType(cardType)
+})
+
+expirationDateMask.on('accept', () => {
+    const ccExp = document.querySelector('.cc-extra .value')
+    
+    ccExp.innerText = expirationDateMask.value.length === 0 ? "MM/YY" : expirationDateMask.value
 })
