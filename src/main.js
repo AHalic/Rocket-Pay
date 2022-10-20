@@ -37,6 +37,19 @@ const securityCodeMask = IMask(securityCode, {
     lazy: false,
 })
 
+// Removes lazy when not focused
+securityCode.addEventListener('focus', function() {
+    securityCodeMask.updateOptions({ lazy: false });
+}, true);
+securityCode.addEventListener('blur', function() {
+    securityCodeMask.updateOptions({ lazy: true });
+    // NEXT IS OPTIONAL
+    if (!securityCodeMask.masked.rawInputValue) {
+        securityCodeMask.value = '';
+    }
+}, true);
+
+
 // Adds card expirations mask
 const expirationDate = document.querySelector('#expiration-date')
 const momentFormat = 'MM/YY'
@@ -134,4 +147,12 @@ cardHolder.addEventListener('input', (event) => {
     const ccHolder = document.querySelector('.cc-holder .value')
 
     ccHolder.innerText = event.target.value.length === 0 ? "FULANO DA SILVA" : event.target.value
+})
+
+
+// verifica quando o dado digitado esta de acordo com a mascara 
+securityCodeMask.on('accept', () => {
+    const ccCvv = document.querySelector('.cc-security .value')
+    
+    ccCvv.innerText = securityCodeMask.value.length === 0 ? "123" : securityCodeMask.value
 })
